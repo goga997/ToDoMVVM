@@ -22,23 +22,14 @@ class TableViewCellViewModel: TableViewCellViewModelProtocol {
     init(cellReference: TableViewCell) {
         self.cellReference = cellReference
     }
-    
-    
+
     func setUpData(element: ToDoElementModel) {
         cellReference.namelabel.text = element.title
+        cellReference.colorIndicator.backgroundColor = element.priority.color
     }
+    
     
     func setPriorityColor(element: ToDoElementModel) {
-        switch element.priority {
-        case .low :
-            cellReference.namelabel.textColor = .green
-        case .medium :
-            cellReference.namelabel.textColor = .yellow
-        case .high :
-            cellReference.namelabel.textColor = .red
-
-        }
-        
+        cellReference.colorIndicator.backgroundColor = element.priority.color
     }
-    
 }

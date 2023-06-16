@@ -19,16 +19,15 @@ class DataBaseService {
     
     private init() {
         self.elementsData = [
-            ToDoElementModel(title: "Math", information: "Mathematics is an area of knowledge that includes the topics of numbers, formulas and related structures, shapes and the spaces in which they are contained, and quantities and their changes. These topics are represented in modern mathematics with the major subdisciplines of number theory,[1] algebra,[2] geometry,[1] and analysis,[3][4] respectively. There is no", priority: .high),
-            ToDoElementModel(title: "Geography", information: "Geography (from Greek: γεωγραφία, geographia. Combination of Greek words 'Geo' (The Earth) and 'Graphien' (to describe), literally  is a field of science devoted to the study of the lands, features, inhabit", priority: .low),
-            ToDoElementModel(title: "English", information: "red", priority: .high),
-            ToDoElementModel(title: "History", information: "History is an academic discipline which uses narrative to describe, examine, question, and analyze past events, and investigate their patterns of cause and effect.[6][7] Historians debate which narrative best explains an event, as well as t", priority: .medium),
-            ToDoElementModel(title: "Biology", information: "Anatomy is a complex and dynamic field that is constantly evolving as new discoveries are made. In recent years, there has been a significant increase in the use of advanced imaging techniques, such as MRI and CT scans, which allow for more detailed and accurate", priority: .low),
-            ToDoElementModel(title: "Astronomy", information: "Yellow", priority: .low),
-            ToDoElementModel(title: "Metaol", information: "abraadd", priority: .medium)
+//            ToDoElementModel(title: "Math", information: "Mathematics is an area of knowledge that includes the topics of numbers, formulas and related structures, shapes and the spaces in which they are contained, and quantities and their changes. These topics are represented in modern mathematics with the major subdisciplines of number theory,[1] algebra,[2] geometry,[1] and analysis,[3][4] respectively. There is no", priority: .high),
+//            ToDoElementModel(title: "Geography", information: "Geography (from Greek: γεωγραφία, geographia. Combination of Greek words 'Geo' (The Earth) and 'Graphien' (to describe), literally  is a field of science devoted to the study of the lands, features, inhabit", priority: .low),
+//            ToDoElementModel(title: "English", information: "red", priority: .high),
+//            ToDoElementModel(title: "History", information: "History is an academic discipline which uses narrative to describe, examine, question, and analyze past events, and investigate their patterns of cause and effect.[6][7] Historians debate which narrative best explains an event, as well as t", priority: .medium),
+//            ToDoElementModel(title: "Biology", information: "Anatomy is a complex and dynamic field that is constantly evolving as new discoveries are made. In recent years, there has been a significant increase in the use of advanced imaging techniques, such as MRI and CT scans, which allow for more detailed and accurate", priority: .low),
+//            ToDoElementModel(title: "Astronomy", information: "Yellow", priority: .low),
+//            ToDoElementModel(title: "Metaol", information: "abraadd", priority: .medium)
         ]
-        
-        
+    
 //        let number = Int()
 //        let aaa = String()
 //        let ToDoElementModel = ToDoElementModel(title: <#T##String#>, information: <#T##String#>, priority: <#T##Priority#>)
@@ -99,5 +98,12 @@ class DataBaseService {
         }
         
         return false
+    }
+    
+    
+    func save(dataArray: [ToDoElementModel]) {
+        self.elementsData = dataArray
+        
+        saveData()
     }
 }

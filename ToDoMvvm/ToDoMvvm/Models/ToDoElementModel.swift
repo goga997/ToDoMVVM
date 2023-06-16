@@ -8,10 +8,12 @@
 import Foundation
 import UIKit
 
-struct ToDoElementModel: Codable {
+struct ToDoElementModel: Codable, Identifiable {
     var title: String = ""
     var information: String = ""
     var priority: Priority = .low
+    
+    var id = UUID()
 }
 
 enum Priority: Codable {
