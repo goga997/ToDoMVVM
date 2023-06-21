@@ -10,7 +10,7 @@ import UIKit
 class DetailedElementViewController: UIViewController {
 
     private lazy var containerView = DetailedElementView()
-        
+            
     init(toDoElementModel: ToDoElementModel) {
         super.init(nibName: nil, bundle: nil)
         self.containerView.detailedElementViewModel = DetailedElementViewModel(detailedViewReference: containerView, toDoElementModel: toDoElementModel)

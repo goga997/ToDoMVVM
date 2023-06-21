@@ -18,38 +18,56 @@ protocol DetailedElementViewModelProtocol {
     func setUpINformation()
     func setUpPriority()
     func deleteElement()
+    func editElement()
+    func editPriority(element: Priority)
 }
 
 
 class DetailedElementViewModel: DetailedElementViewModelProtocol {
     
-    
     var detailedViewReference: DetailedElementView
     var toDoElementModel: ToDoElementModel
-  
+    
     required init(detailedViewReference: DetailedElementView, toDoElementModel: ToDoElementModel) {
         self.detailedViewReference = detailedViewReference
         self.toDoElementModel = toDoElementModel
     }
     
+    
     func setUpTitle() {
-        detailedViewReference.titleLabel.text = toDoElementModel.title
+        detailedViewReference.titleTxField.text = toDoElementModel.title
     }
+    
     
     func setUpINformation() {
         detailedViewReference.textView.text = toDoElementModel.information
     }
+    
     
     func setUpPriority() {
         detailedViewReference.textView.layer.borderColor = toDoElementModel.priority.color.cgColor
         detailedViewReference.textView.layer.borderWidth = 3
     }
     
+    
     func deleteElement() {
-        var temporarContainer = DataBaseService.shared.readData()
-
-        temporarContainer.removeAll(where: {$0.id == toDoElementModel.id})
-
-        DataBaseService.shared.save(dataArray: temporarContainer)
+        DataBaseService.shared.deleteElement(id: toDoElementModel.id)
+    }
+    
+    
+    func editElement() {
+        guard let valueFromTextField = detailedViewReference.titleTxField.text else { return }
+        toDoElementModel.title = valueFromTextField
+        
+        guard let valueFromTextView = detailedViewReference.textView.text else { return }
+        toDoElementModel.information = valueFromTextView
+        
+        DataBaseService.shared.editElement(element: toDoElementModel)
+    }
+    
+    
+    func editPriority(element: Priority) {
+        toDoElementModel.priority = element
+        DataBaseService.shared.editElement(element: toDoElementModel)
     }
 }

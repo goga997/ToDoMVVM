@@ -9,7 +9,7 @@ import UIKit
 
 class SetNewElementView: UIView {
     
-     lazy var textField: UITextField = {
+    lazy var textField: UITextField = {
         let textField = UITextField()
         textField.textAlignment = .center
         textField.text = "Enter task:"
@@ -21,18 +21,20 @@ class SetNewElementView: UIView {
         textField.font = UIFont(name: "Avenir Next", size: 24)
         textField.clearButtonMode = .always
         textField.returnKeyType = .done
+        textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
     
-     lazy var descriptionTextView: UITextView = {
+    lazy var descriptionTextView: UITextView = {
         let textView = UITextView()
-        textView.text = "Type here..."
+        textView.text = "Type here"
         textView.font = UIFont(name: "Avenir Next", size: 24)
         textView.layer.cornerRadius = 15
         textView.layer.borderColor = UIColor.white.cgColor
         textView.layer.borderWidth = 1
         textView.textColor = .white
+        textView.delegate = self
         textView.backgroundColor = #colorLiteral(red: 0.1411764771, green: 0.3960784376, blue: 0.5647059083, alpha: 1)
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
@@ -45,6 +47,8 @@ class SetNewElementView: UIView {
         button.backgroundColor = #colorLiteral(red: 1, green: 0.4378189445, blue: 0.4139066935, alpha: 1)
         button.setTitle("SAVE", for: .normal)
         button.setTitleColor(.white, for: .normal)
+        button.isEnabled = false
+        button.alpha = 0.5
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -79,7 +83,19 @@ class SetNewElementView: UIView {
     private var stackView = UIStackView()
     
     var setNewElementViewModel: SetNewElementViewModel?
-        
+    
+    var isActive: Bool = false {
+        didSet
+        {
+            if self.isActive {
+                saveButton.alpha = 1.0
+                saveButton.isEnabled = true
+            } else {
+                saveButton.alpha = 0.5
+                saveButton.isEnabled = false
+            }
+        }
+    }
     
     //MARK: - INITIALIZATION
     
@@ -96,31 +112,26 @@ class SetNewElementView: UIView {
     
     
     //OBJC FUNCTIONS
-    
     @objc private func lowTapped() {
-        print("tap")
         setNewElementViewModel?.setPriority(element: .low)
     }
     
     @objc private func mediumTapped() {
-        print("tap")
         setNewElementViewModel?.setPriority(element: .medium)
-
     }
     
     @objc private func highTapped() {
-        print("tap")
         setNewElementViewModel?.setPriority(element: .high)
-
     }
     
     @objc private func saveAction() {
         setNewElementViewModel?.save()
     }
     
+    
     private func offKeyboard() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(UIView.endEditing))
-         self.addGestureRecognizer(tapGesture)
+        self.addGestureRecognizer(tapGesture)
     }
     
     //MARK: -
@@ -133,8 +144,8 @@ class SetNewElementView: UIView {
         self.addSubview(descriptionTextView)
         
         stackView = UIStackView(arrangedSubviews: [lowPriorityButton, mediumPriorityButton, highPriorityButton],
-                                      axis: .horizontal)
-                                      
+                                axis: .horizontal)
+        
         stackView.distribution = .fillProportionally
         self.addSubview(stackView)
         self.addSubview(saveButton)
@@ -165,5 +176,30 @@ extension SetNewElementView {
             saveButton.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 0.9),
             saveButton.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.07),
         ])
+    }
+}
+
+//UITextView delegates
+extension SetNewElementView: UITextViewDelegate {
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == "Type here" {
+            textView.text = ""
+        }
+    }
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "Type here" || textView.text == " " || textView.text == "" {
+            isActive = false
+        } else {
+            isActive = true
+        }
+    }
+}
+
+
+extension SetNewElementView: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        if textField.text == "Enter task:" {
+            textField.text = ""
+        }
     }
 }

@@ -18,7 +18,7 @@ protocol SetNewElementViewModelProtocol {
 class SetNewElementViewModel: SetNewElementViewModelProtocol {
     var setNewElementViewRefference: SetNewElementView
     var subject: Subject
-
+    
     
     init(setNewElementViewRefference: SetNewElementView) {
         self .setNewElementViewRefference = setNewElementViewRefference
@@ -31,7 +31,18 @@ class SetNewElementViewModel: SetNewElementViewModelProtocol {
         
         subject.modifyTitle(tittle: title)
         subject.modifyInformation(information: description)
-        DataBaseService.shared.addData(element: subject.context)
+        
+        let result = DataBaseService.shared.addData(element: subject.context)
+        
+        if result {
+            guard let parrentController = setNewElementViewRefference.findViewController() as? SetNewElementViewController else {
+                print("There is no result of Controller")
+                return
+            }
+            parrentController.navigationController?.popViewController(animated: true)
+        } else {
+            print("Failed to save data")
+        }
     }
     
     func setPriority(element: Priority) {
