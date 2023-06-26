@@ -6,21 +6,26 @@
 //
 
 import Foundation
+import FirebaseFirestore
 
 class DataBaseService {
-    
+        
     static let storageKEy = "DataBaseService"
     
     private let userDefaults = UserDefaults.standard
     
-    var elementsData: [ToDoElementModel]
+    private let fireBase = Firestore.firestore()
     
+    var elementsData: [ToDoElementModel]
+    var elementsForFireBase = [ToDoElementModel]()
+
     static let shared = DataBaseService()
     
     private init() {
         self.elementsData = []
     }
  
+    //MARK: - UserDefaults
     func readData() -> [ToDoElementModel] {
         guard let encodedData = userDefaults.data(forKey: DataBaseService.storageKEy) else {
             return []
@@ -89,4 +94,66 @@ class DataBaseService {
         return saveData()
     }
     
+        //MARK: - FireBase
+    
+    func readDataFireBase(completion: @escaping([ToDoElementModel]) -> Void) {
+        fireBase.collection("toDoElements").getDocuments { querySnapshot, err in
+            if let err = err {
+                print("Erro to get docs \(err)")
+            } else if let  querySnapshot = querySnapshot {
+                
+                for toDoElement in querySnapshot.documents {
+                    let data = toDoElement.data()
+                    var newElement = ToDoElementModel()
+                    for index in data.keys {
+                        guard let element = data[index] as? String else { return }
+                        if index == "title" {
+                            newElement.title = element
+                            
+                        } else if index == "information" {
+                            newElement.information = element
+                            
+                        } else if index == "priority" {
+                            newElement.priority = .init(rawValue: element) ?? .low
+                        }
+                        
+                    }
+                    self.elementsForFireBase.append(newElement)
+                }
+                
+                completion(self.elementsForFireBase)
+            }
+        }
+    }
+    
+//    func getDataFireBase() {
+//        fireBase.collection("toDoElements").getDocuments { (snapshot, _) in
+//            let toDoElements = snapshot!.documents
+//            try! toDoElements.forEach { toDoElement in
+//
+//                let element: ToDoFireBase = try toDoElement.decoded()
+//                print(element)
+//
+//            }
+//        }
+//    }
+//
+//    func readFireBase(completion: @escaping (Bool, [ToDoFireBase]) -> ()) {
+//        var toDoElem = [ToDoFireBase]()
+//        fireBase.collection("toDoElements").getDocuments() { (querrySnappshot, err) in
+//            if let err = err {
+//                print("Error getting documents \(err) ")
+//                completion(false, toDoElem)
+//            } else {
+//                for toDoElement in querrySnappshot!.documents {
+//                    let data = toDoElement.data()
+//                    toDoElem = data
+//                }
+//                completion(true, toDoElem)
+//                print(toDoElem)
+//            }
+//        }
+//    }
+    
+   
 }

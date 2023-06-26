@@ -9,14 +9,26 @@ import Foundation
 import UIKit
 
 struct ToDoElementModel: Codable, Identifiable {
-    var title: String = ""
-    var information: String = ""
-    var priority: Priority = .low
+    var title: String
+    var information: String
+    var priority: Priority
     
     var id = UUID()
+    
+    init(title: String, information: String, priority: String) {
+        self.title = title
+        self.information = information
+        self.priority = .init(rawValue: priority) ?? .low
+    }
+    
+    init() {
+        self.title = ""
+        self.information = ""
+        self.priority = .low
+    }
 }
 
-enum Priority: Codable {
+enum Priority: String, Codable {
     var color: UIColor {
         switch self {
         case .low :
@@ -28,7 +40,18 @@ enum Priority: Codable {
         }
     }
     
-    case low
-    case medium
-    case high
+    var rawValue: String {
+        switch self {
+        case .low:
+            return "low"
+        case .medium:
+            return "medium"
+        case .high:
+            return "high"
+        }
+    }
+    
+    case low = "low"
+    case medium = "medium"
+    case high = "high"
 }

@@ -11,6 +11,16 @@ class MainViewController: UIViewController {
 
     var arrayElements = [ToDoElementModel]()
     
+    var myArray = [ToDoElementModel]()
+     
+    
+    var elementsForFireBase = [ToDoElementModel]() {
+        didSet {
+            print(elementsForFireBase)
+            tableView.reloadData()
+        }
+    }
+        
     lazy var horizontalTitleStackView: UIStackView = {
        let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -41,15 +51,27 @@ class MainViewController: UIViewController {
         return button
     }()
     
+    
+        
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8014303248)
+        
         setUpView()
         setupHorizontalTitleStackView()
         setLayout()
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.idCell)
+        DataBaseService.shared.readDataFireBase { elementsForFireBase in
+            self.myArray = elementsForFireBase
+            self.tableView.reloadData()
+            print(self.myArray)
+        }
         
     }
+    
+    
 
     private func setUpView() {
         view.addSubview(tableView)
@@ -64,10 +86,46 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.arrayElements = DataBaseService.shared.readData()
-        print(self.arrayElements.count)
         tableView.reloadData()
+    }
 
+}
+
+
+// TABLEVIEW DELEGATES + DATA SOURCE
+typealias MainViewControllerDelegates = MainViewController
+extension MainViewControllerDelegates: UITableViewDataSource, UITableViewDelegate {
+    //1
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return myArray.count
+    }
+
+    //2
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.idCell, for: indexPath) as? TableViewCell else {
+            return UITableViewCell()
+
+        }
+        cell.selectionStyle = .none
+
+        let currentElement = myArray[indexPath.row]
+
+        cell.tableViewCellViewModel?.setUpData(element: currentElement)
+        return cell
+
+    }
+
+    //3
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let currentElement = myArray[indexPath.row]
+
+        let detailedViewController = DetailedElementViewController(toDoElementModel: currentElement)
+        navigationController?.pushViewController(detailedViewController, animated: true)
+    }
+
+    //4
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        90
     }
 
 }
@@ -136,44 +194,4 @@ extension MainViewController {
         ])
     }
 }
-
-// TABLEVIEW DELEGATES + DATA SOURCE
-typealias MainViewControllerDelegates = MainViewController
-extension MainViewControllerDelegates: UITableViewDataSource, UITableViewDelegate {
-    //1
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        arrayElements.count
-    }
-    
-    //2
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TableViewCell.idCell, for: indexPath) as? TableViewCell else {
-            return UITableViewCell()
-            
-        }
-      
-        cell.selectionStyle = .none
-        
-        let currentElement = arrayElements[indexPath.row]
-        
-        cell.tableViewCellViewModel?.setUpData(element: currentElement)
-        return cell
-        
-    }
-    
-    //3
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let currentElement = arrayElements[indexPath.row]
-        
-        let detailedViewController = DetailedElementViewController(toDoElementModel: currentElement)
-        navigationController?.pushViewController(detailedViewController, animated: true)
-    }
-    
-    //4
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        90
-    }
-    
-}
-
 
