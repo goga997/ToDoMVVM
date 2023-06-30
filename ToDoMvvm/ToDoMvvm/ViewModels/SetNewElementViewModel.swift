@@ -28,21 +28,20 @@ class SetNewElementViewModel: SetNewElementViewModelProtocol {
     func save() {
         guard let title = setNewElementViewRefference.textField.text else { return }
         guard let description = setNewElementViewRefference.descriptionTextView.text else { return }
-        
+
         subject.modifyTitle(tittle: title)
         subject.modifyInformation(information: description)
         
-        let result = DataBaseService.shared.addData(element: subject.context)
-        
-        if result {
+//        let result = DataBaseService.shared.addData(element: subject.context)
+//
+        let result = DataBaseService.shared.addDataFireBase(element: subject.context)
+
             guard let parrentController = setNewElementViewRefference.findViewController() as? SetNewElementViewController else {
                 print("There is no result of Controller")
                 return
             }
             parrentController.navigationController?.popViewController(animated: true)
-        } else {
-            print("Failed to save data")
-        }
+        
     }
     
     func setPriority(element: Priority) {

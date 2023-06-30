@@ -9,17 +9,10 @@ import UIKit
 
 class MainViewController: UIViewController {
 
-    var arrayElements = [ToDoElementModel]()
     
     var myArray = [ToDoElementModel]()
      
-    
-    var elementsForFireBase = [ToDoElementModel]() {
-        didSet {
-            print(elementsForFireBase)
-            tableView.reloadData()
-        }
-    }
+
         
     lazy var horizontalTitleStackView: UIStackView = {
        let stackView = UIStackView()
@@ -51,10 +44,7 @@ class MainViewController: UIViewController {
         return button
     }()
     
-    
-        
-    
-    
+    //MARK: - LyfeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = #colorLiteral(red: 0, green: 0.5898008943, blue: 1, alpha: 0.8014303248)
@@ -63,16 +53,9 @@ class MainViewController: UIViewController {
         setupHorizontalTitleStackView()
         setLayout()
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.idCell)
-        DataBaseService.shared.readDataFireBase { elementsForFireBase in
-            self.myArray = elementsForFireBase
-            self.tableView.reloadData()
-            print(self.myArray)
-        }
         
     }
-    
-    
-
+ 
     private func setUpView() {
         view.addSubview(tableView)
         view.addSubview(addButton)
@@ -86,11 +69,13 @@ class MainViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.reloadData()
+        DataBaseService.shared.readDataFireBase { elementsForFireBase in
+            self.myArray = elementsForFireBase
+            self.tableView.reloadData()
+        }
     }
 
 }
-
 
 // TABLEVIEW DELEGATES + DATA SOURCE
 typealias MainViewControllerDelegates = MainViewController

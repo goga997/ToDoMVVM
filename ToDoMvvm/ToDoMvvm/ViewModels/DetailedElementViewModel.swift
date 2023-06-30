@@ -51,7 +51,8 @@ class DetailedElementViewModel: DetailedElementViewModelProtocol {
     
     
     func deleteElement() {
-        DataBaseService.shared.deleteElement(id: toDoElementModel.id)
+//        DataBaseService.shared.deleteElement(id: toDoElementModel.id)
+        DataBaseService.shared.deleteElementFireBase(id: toDoElementModel.id)
     }
     
     
@@ -62,7 +63,8 @@ class DetailedElementViewModel: DetailedElementViewModelProtocol {
         guard let valueFromTextView = detailedViewReference.textView.text else { return }
         toDoElementModel.information = valueFromTextView
         
-        DataBaseService.shared.editElement(element: toDoElementModel)
+//        DataBaseService.shared.editElement(element: toDoElementModel)
+        DataBaseService.shared.editElementFireBase(element: toDoElementModel)
     }
     
     

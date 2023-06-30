@@ -7,13 +7,14 @@
 
 import Foundation
 import UIKit
+import FirebaseFirestoreSwift
 
-struct ToDoElementModel: Codable, Identifiable {
+struct ToDoElementModel: Codable {
     var title: String
     var information: String
     var priority: Priority
     
-    var id = UUID()
+    var id: String = ""
     
     init(title: String, information: String, priority: String) {
         self.title = title

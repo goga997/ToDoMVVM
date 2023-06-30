@@ -17,12 +17,13 @@ class DataBaseService {
     private let fireBase = Firestore.firestore()
     
     var elementsData: [ToDoElementModel]
-    var elementsForFireBase = [ToDoElementModel]()
+    var elementsForFireBase: [ToDoElementModel]
 
     static let shared = DataBaseService()
     
     private init() {
         self.elementsData = []
+        self.elementsForFireBase = []
     }
  
     //MARK: - UserDefaults
@@ -77,7 +78,7 @@ class DataBaseService {
     }
     
     
-    func deleteElement(id: UUID) -> Bool {
+    func deleteElement(id: String) -> Bool {
         var temporarContainer = readData()
         temporarContainer.removeAll(where: {$0.id == id})
         elementsData = temporarContainer
@@ -103,10 +104,13 @@ class DataBaseService {
             } else if let  querySnapshot = querySnapshot {
                 
                 for toDoElement in querySnapshot.documents {
+                    
                     let data = toDoElement.data()
                     var newElement = ToDoElementModel()
                     for index in data.keys {
-                        guard let element = data[index] as? String else { return }
+                        guard let element = data[index] as? String else {
+                            return
+                        }
                         if index == "title" {
                             newElement.title = element
                             
@@ -115,8 +119,9 @@ class DataBaseService {
                             
                         } else if index == "priority" {
                             newElement.priority = .init(rawValue: element) ?? .low
+                        } else if index == "id" {
+                            newElement.id = toDoElement.documentID
                         }
-                        
                     }
                     self.elementsForFireBase.append(newElement)
                 }
@@ -125,6 +130,70 @@ class DataBaseService {
             }
         }
     }
+    
+    
+    func addDataFireBase(element: ToDoElementModel) {
+        var ref: DocumentReference?
+        var temporarElement = element
+        
+         ref = fireBase.collection("toDoElements").addDocument(data: [
+            "title" : element.title,
+            "information" : element.information,
+            "priority" : element.priority.rawValue,
+            "id" : element.id
+        ]) { (error) in
+            if let err = error {
+                print(err)
+            } else {
+                print("Docc was added successfuly \(ref!.documentID)")
+                temporarElement.id = ref!.documentID
+                self.editElementFireBase(element: temporarElement)
+            }
+        }
+        
+    }
+    
+    
+    func editElementFireBase(element: ToDoElementModel) {
+        fireBase.collection("toDoElements").document(element.id).updateData([
+            "title" : element.title,
+            "information" : element.information,
+            "priority" : element.priority.rawValue,
+            "id" : element.id
+        ]) { (error) in
+            if let err = error {
+                print(err)
+            } else {
+                "Docc was updated successfuly"
+            }
+        }
+    }
+    
+    func deleteElementFireBase(id: String) {
+        fireBase.collection("toDoElements").document(id).delete() { (arg) in
+            if let err = arg {
+                print(err)
+            } else {
+                print("Element with \(id) was deleted succesfully")
+            }
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
 //    func getDataFireBase() {
 //        fireBase.collection("toDoElements").getDocuments { (snapshot, _) in
