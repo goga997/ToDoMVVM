@@ -17,13 +17,13 @@ class DataBaseService {
     private let fireBase = Firestore.firestore()
     
     var elementsData: [ToDoElementModel]
-    var elementsForFireBase: [ToDoElementModel]
+//    var elementsForFireBase: [ToDoElementModel]
 
     static let shared = DataBaseService()
     
     private init() {
         self.elementsData = []
-        self.elementsForFireBase = []
+//        self.elementsForFireBase = []
     }
  
     //MARK: - UserDefaults
@@ -98,11 +98,13 @@ class DataBaseService {
         //MARK: - FireBase
     
     func readDataFireBase(completion: @escaping([ToDoElementModel]) -> Void) {
+        
+        var elementsForFireBase = [ToDoElementModel]()
+
         fireBase.collection("toDoElements").getDocuments { querySnapshot, err in
             if let err = err {
                 print("Erro to get docs \(err)")
             } else if let  querySnapshot = querySnapshot {
-                
                 for toDoElement in querySnapshot.documents {
                     
                     let data = toDoElement.data()
@@ -116,18 +118,16 @@ class DataBaseService {
                             
                         } else if index == "information" {
                             newElement.information = element
-                            
                         } else if index == "priority" {
                             newElement.priority = .init(rawValue: element) ?? .low
                         } else if index == "id" {
                             newElement.id = toDoElement.documentID
                         }
                     }
-                    self.elementsForFireBase.append(newElement)
+                        elementsForFireBase.append(newElement)
                 }
-                
-                completion(self.elementsForFireBase)
             }
+            completion(elementsForFireBase)
         }
     }
     
@@ -152,7 +152,7 @@ class DataBaseService {
         }
         
     }
-    
+
     
     func editElementFireBase(element: ToDoElementModel) {
         fireBase.collection("toDoElements").document(element.id).updateData([
@@ -164,10 +164,11 @@ class DataBaseService {
             if let err = error {
                 print(err)
             } else {
-                "Docc was updated successfuly"
+                print("Docc was updated successfuly")
             }
         }
     }
+    
     
     func deleteElementFireBase(id: String) {
         fireBase.collection("toDoElements").document(id).delete() { (arg) in

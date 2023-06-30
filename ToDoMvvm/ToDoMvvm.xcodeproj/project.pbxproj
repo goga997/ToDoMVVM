@@ -28,7 +28,6 @@
 		DF6A662D2A33420700B1E7B0 /* ToDoElementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A662C2A33420700B1E7B0 /* ToDoElementModel.swift */; };
 		DF6A662F2A334D8600B1E7B0 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A662E2A334D8600B1E7B0 /* TableViewCell.swift */; };
 		DF6A66312A334F4100B1E7B0 /* TableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF6A66302A334F4100B1E7B0 /* TableViewCellViewModel.swift */; };
-		DF8FD35C2A44483F00F1C371 /* ToDoFireBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8FD35B2A44483F00F1C371 /* ToDoFireBase.swift */; };
 		DF8FD35E2A4491F600F1C371 /* SnapshotExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8FD35D2A4491F500F1C371 /* SnapshotExtension.swift */; };
 		DF99D3442A432F8C00152662 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF99D3432A432F8C00152662 /* GoogleService-Info.plist */; };
 		DF99D34C2A43380A00152662 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = DF99D34B2A43380A00152662 /* FirebaseDatabase */; };
@@ -81,7 +80,6 @@
 		DF6A662C2A33420700B1E7B0 /* ToDoElementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoElementModel.swift; sourceTree = "<group>"; };
 		DF6A662E2A334D8600B1E7B0 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		DF6A66302A334F4100B1E7B0 /* TableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellViewModel.swift; sourceTree = "<group>"; };
-		DF8FD35B2A44483F00F1C371 /* ToDoFireBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoFireBase.swift; sourceTree = "<group>"; };
 		DF8FD35D2A4491F500F1C371 /* SnapshotExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnapshotExtension.swift; sourceTree = "<group>"; };
 		DF99D3432A432F8C00152662 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -185,7 +183,6 @@
 			isa = PBXGroup;
 			children = (
 				DF6A662C2A33420700B1E7B0 /* ToDoElementModel.swift */,
-				DF8FD35B2A44483F00F1C371 /* ToDoFireBase.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -394,7 +391,6 @@
 				DF0AD9E82A3C42D50068F427 /* Observer.swift in Sources */,
 				DF6A662F2A334D8600B1E7B0 /* TableViewCell.swift in Sources */,
 				DF1A2E032A3A178C009D82C0 /* DetailedElementView.swift in Sources */,
-				DF8FD35C2A44483F00F1C371 /* ToDoFireBase.swift in Sources */,
 				DF6A662D2A33420700B1E7B0 /* ToDoElementModel.swift in Sources */,
 				DF6A65F62A333F7700B1E7B0 /* SceneDelegate.swift in Sources */,
 			);

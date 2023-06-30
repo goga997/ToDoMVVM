@@ -9,10 +9,7 @@ import UIKit
 
 class MainViewController: UIViewController {
 
-    
     var myArray = [ToDoElementModel]()
-     
-
         
     lazy var horizontalTitleStackView: UIStackView = {
        let stackView = UIStackView()
@@ -53,7 +50,6 @@ class MainViewController: UIViewController {
         setupHorizontalTitleStackView()
         setLayout()
         tableView.register(TableViewCell.self, forCellReuseIdentifier: TableViewCell.idCell)
-        
     }
  
     private func setUpView() {
@@ -71,6 +67,7 @@ class MainViewController: UIViewController {
         
         DataBaseService.shared.readDataFireBase { elementsForFireBase in
             self.myArray = elementsForFireBase
+//            print(elementsForFireBase)
             self.tableView.reloadData()
         }
     }
